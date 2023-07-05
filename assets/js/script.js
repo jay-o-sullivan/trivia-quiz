@@ -126,23 +126,45 @@ function showQuestion() {
   
 
 // Check answer function
-function checkAnswer(answerIndex) {
-  const currentQuestion = quizQuestions[currentQuestionIndex];
-
-  // Check if the answer is correct
-  if (answerIndex === currentQuestion.correctAnswer) {
-    score++;
-    feedbackElement.textContent = 'Correct answer!';
-  } else {
-    feedbackElement.textContent = 'Wrong answer!';
+function checkAnswer(selectedIndex) {
+    // Disable options buttons to prevent multiple clicks
+    disableOptions();
+  
+    // Get the current question
+    const currentQuestion = quizQuestions[currentQuestionIndex];
+  
+    // Check if the selected answer is correct
+    const isCorrect = selectedIndex === currentQuestion.answerIndex;
+  
+    // Update score
+    if (isCorrect) {
+      score++;
+    }
+  
+    // Display feedback
+    displayFeedback(isCorrect);
+  
+    // Move to the next question
+    currentQuestionIndex++;
+    
+    // Delay showing the next question for better user experience
+    setTimeout(showQuestion, 1000);
   }
-
-  // Increment the question index
-  currentQuestionIndex++;
-
-  // Show the next question
-  showQuestion();
-}
+  
+  // Disable options buttons function
+  function disableOptions() {
+    const optionsButtons = Array.from(document.querySelectorAll('.option'));
+    optionsButtons.forEach((button) => {
+      button.disabled = true;
+    });
+  }
+  
+  // Display feedback function
+  function displayFeedback(isCorrect) {
+    feedbackElement.style.display = 'block';
+    feedbackElement.textContent = isCorrect ? 'Correct!' : 'Incorrect!';
+  }
+  
 
 // Show quiz summary function
 function showQuizSummary() {
