@@ -31,7 +31,7 @@ const quizQuestions = [
     options: ['Go', 'Au', 'Ag', 'Gd'],
     correctAnswer: 1
   },
-  // Add more questions...
+ 
 ];
 
 // Start Quiz function
@@ -54,33 +54,76 @@ function startQuiz() {
   showQuestion();
 }
 
+
 // Show question function
 function showQuestion() {
-  // Check if all questions have been answered
-  if (currentQuestionIndex >= quizQuestions.length) {
-    // Display quiz summary
-    showQuizSummary();
-    return;
+    // Check if all questions have been answered
+    if (currentQuestionIndex >= quizQuestions.length) {
+      // Display quiz summary
+      showQuizSummary();
+      return;
+    }
+  
+    // Get the current question
+    const currentQuestion = quizQuestions[currentQuestionIndex];
+  
+    // Display question
+    questionElement.textContent = currentQuestion.question;
+  
+    // Clear options container
+    optionsContainer.innerHTML = '';
+  
+    // Create options buttons
+    currentQuestion.options.forEach((option, index) => {
+      const optionButton = document.createElement('button');
+      optionButton.textContent = option;
+      optionButton.classList.add('option');
+      optionButton.addEventListener('click', () => checkAnswer(index));
+      optionsContainer.appendChild(optionButton);
+    });
+  
+    // Start timer
+    startTimer();
   }
-
-  // Get the current question
-  const currentQuestion = quizQuestions[currentQuestionIndex];
-
-  // Display question
-  questionElement.textContent = currentQuestion.question;
-
-  // Clear options container
-  optionsContainer.innerHTML = '';
-
-  // Create options buttons
-  currentQuestion.options.forEach((option, index) => {
-    const optionButton = document.createElement('button');
-    optionButton.textContent = option;
-    optionButton.classList.add('option');
-    optionButton.addEventListener('click', () => checkAnswer(index));
-    optionsContainer.appendChild(optionButton);
-  });
-}
+  
+  // Timer variables
+  const timeLimit = 10; // Time limit in seconds
+  let timer; // Timer variable
+  
+  // Start timer function
+  function startTimer() {
+    let timeRemaining = timeLimit;
+  
+    // Display initial time remaining
+    updateTimerDisplay(timeRemaining);
+  
+    // Start countdown
+    timer = setInterval(() => {
+      timeRemaining--;
+      updateTimerDisplay(timeRemaining);
+  
+      // Check if time is up
+      if (timeRemaining <= 0) {
+        clearInterval(timer);
+        handleTimeUp();
+      }
+    }, 1000);
+  }
+  
+  // Update timer display function
+  function updateTimerDisplay(time) {
+    // Display remaining time
+    const seconds = time < 10 ? '0' + time : time;
+    timerElement.textContent = `Time Remaining: ${seconds}s`;
+  }
+  
+  // Handle time up function
+  function handleTimeUp() {
+    feedbackElement.textContent = 'Time is up!';
+    currentQuestionIndex++;
+    showQuestion();
+  }
+  
 
 // Check answer function
 function checkAnswer(answerIndex) {
