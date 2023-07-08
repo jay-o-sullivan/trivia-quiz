@@ -1,178 +1,127 @@
-// Get DOM elements
-const usernameInput = document.getElementById('username-input');
-const startButton = document.getElementById('start-button');
-const questionContainer = document.getElementById('question-container');
-const questionElement = document.getElementById('question');
-const optionsContainer = document.getElementById('options-container');
-const feedbackElement = document.getElementById('feedback');
-const scoreElement = document.getElementById('score');
+var username;
+var currentQuestion = 0;
+var score = 0;
+var timer;
+var timeLeft = 60; // Total time for the quiz (in seconds)
 
-// Event listener for the Start Quiz button
-startButton.addEventListener('click', startQuiz);
+var questions = [
+    {
+        question: "What is the capital of France?",
+        choices: ["Paris", "London", "Madrid", "Rome"],
+        correctAnswer: 0
+    },
+    {
+        question: "Who is the author of 'To Kill a Mockingbird'?",
+        choices: ["Harper Lee", "Mark Twain", "J.K. Rowling", "Charles Dickens"],
+        correctAnswer: 0
+    },
+    {
+        question: "What is the largest planet in our solar system?",
+        choices: ["Jupiter", "Saturn", "Mars", "Earth"],
+        correctAnswer: 0
+    },
+    {
+        question: "What is the fastest field sport?",
+        choices: ["Hurling", "Camogie", "Soccer", "Football"],
+        correctAnswer: 0
+    },
+    {
+        question: "What is the capital of Portugal?",
+        choices: ["Porto", "Lisbon", "Braga", "Amadora"],
+        correctAnswer: 1
+    },
+    {
+        question: "How many valves does the heart have?",
+        choices: ["2", "3", "4", "6"],
+        correctAnswer: 1
+    },
+    {
+        question: "How many elements are in the periodic table? ",
+        choices: ["126", "165", "94", "118"],
+        correctAnswer: 3
+    },
 
-let username = '';
-let currentQuestionIndex = 0;
-let score = 0;
-
-// Quiz questions
-const quizQuestions = [
-  {
-    question: 'What is the capital of France?',
-    options: ['Paris', 'London', 'Berlin', 'Rome'],
-    correctAnswer: 0
-  },
-  {
-    question: 'Which planet is known as the Red Planet?',
-    options: ['Mars', 'Venus', 'Jupiter', 'Mercury'],
-    correctAnswer: 0
-  },
-  {
-    question: 'What is the chemical symbol for gold?',
-    options: ['Go', 'Au', 'Ag', 'Gd'],
-    correctAnswer: 1
-  },
- 
 ];
 
-// Start Quiz function
 function startQuiz() {
-  username = usernameInput.value.trim();
+    username = document.getElementById("username").value;
+    if (username.trim() !== "") {
+        document.getElementById("username-form").style.display = "none";
+        document.getElementById("quiz").style.display = "block";
+        showQuestion();
+        startTimer();
+    }
+}
 
-  // Check if the username is entered
-  if (username === '') {
-    alert('Please enter your username.');
-    return;
-  }
+function showQuestion() {
+    var questionElement = document.getElementById("question");
+    var choicesElement = document.getElementById("choices");
+    var question = questions[currentQuestion];
 
-  // Display welcome message
-  alert(`Welcome, ${username}! Are you ready to start the quiz?`);
+    questionElement.textContent = question.question;
 
-  // Clear username input
-  usernameInput.value = '';
+    clearChoices(choicesElement);
+    createChoices(choicesElement, question.choices);
+}
 
-  // Show the first question
-  showQuestion();
+function clearChoices(choicesElement) {
+    while (choicesElement.firstChild) {
+        choicesElement.removeChild(choicesElement.firstChild);
+    }
+}
+
+function createChoices(choicesElement, choices) {
+    for (var i = 0; i < choices.length; i++) {
+        var choice = document.createElement("button");
+        choice.textContent = choices[i];
+        choice.setAttribute("onclick", "checkAnswer(" + i + ")");
+        choicesElement.appendChild(choice);
+    }
 }
 
 
-// Show question function
-function showQuestion() {
-    // Check if all questions have been answered
-    if (currentQuestionIndex >= quizQuestions.length) {
-      // Display quiz summary
-      showQuizSummary();
-      return;
+function checkAnswer(choice) {
+    var question = questions[currentQuestion];
+
+    if (choice === question.correctAnswer) {
+        score++;
     }
-  
-    // Get the current question
-    const currentQuestion = quizQuestions[currentQuestionIndex];
-  
-    // Display question
-    questionElement.textContent = currentQuestion.question;
-  
-    // Clear options container
-    optionsContainer.innerHTML = '';
-  
-    // Create options buttons
-    currentQuestion.options.forEach((option, index) => {
-      const optionButton = document.createElement('button');
-      optionButton.textContent = option;
-      optionButton.classList.add('option');
-      optionButton.addEventListener('click', () => checkAnswer(index));
-      optionsContainer.appendChild(optionButton);
-    });
-  
-    // Start timer
-    startTimer();
-  }
-  
-  // Timer variables
-  const timeLimit = 10; // Time limit in seconds
-  let timer; // Timer variable
-  
-  // Start timer function
-  function startTimer() {
-    let timeRemaining = timeLimit;
-  
-    // Display initial time remaining
-    updateTimerDisplay(timeRemaining);
-  
-    // Start countdown
-    timer = setInterval(() => {
-      timeRemaining--;
-      updateTimerDisplay(timeRemaining);
-  
-      // Check if time is up
-      if (timeRemaining <= 0) {
-        clearInterval(timer);
-        handleTimeUp();
-      }
+
+    currentQuestion++;
+
+    if (currentQuestion === questions.length) {
+        endQuiz();
+    } else {
+        showQuestion();
+    }
+}
+
+function endQuiz() {
+    clearInterval(timer);
+    var quizContainer = document.getElementById("quiz");
+    quizContainer.innerHTML = "<h2>Quiz Ended</h2><p>Username: " + username + "</p><p>Score: " + score + "</p>";
+
+    var restartButton = document.createElement("button");
+    restartButton.textContent = "Restart Quiz";
+    restartButton.setAttribute("onclick", "restartQuiz()");
+    quizContainer.appendChild(restartButton);
+}
+
+function restartQuiz() {
+    location.reload();
+}
+
+
+
+
+
+function startTimer() {
+    timer = setInterval(function() {
+        timeLeft--;
+        document.getElementById("timer").textContent = "Time Left: " + timeLeft + "s";
+
+        if (timeLeft <= 0) {
+            endQuiz();
+        }
     }, 1000);
-  }
-  
-  // Update timer display function
-  function updateTimerDisplay(time) {
-    // Display remaining time
-    const seconds = time < 10 ? '0' + time : time;
-    timerElement.textContent = `Time Remaining: ${seconds}s`;
-  }
-  
-  // Handle time up function
-  function handleTimeUp() {
-    feedbackElement.textContent = 'Time is up!';
-    currentQuestionIndex++;
-    showQuestion();
-  }
-  
-
-// Check answer function
-function checkAnswer(selectedIndex) {
-    // Disable options buttons to prevent multiple clicks
-    disableOptions();
-  
-    // Get the current question
-    const currentQuestion = quizQuestions[currentQuestionIndex];
-  
-    // Check if the selected answer is correct
-    const isCorrect = selectedIndex === currentQuestion.answerIndex;
-  
-    // Update score
-    if (isCorrect) {
-      score++;
-    }
-  
-    // Display feedback
-    displayFeedback(isCorrect);
-  
-    // Move to the next question
-    currentQuestionIndex++;
-    
-    // Delay showing the next question for better user experience
-    setTimeout(showQuestion, 1000);
-  }
-  
-  // Disable options buttons function
-  function disableOptions() {
-    const optionsButtons = Array.from(document.querySelectorAll('.option'));
-    optionsButtons.forEach((button) => {
-      button.disabled = true;
-    });
-  }
-  
-  // Display feedback function
-  function displayFeedback(isCorrect) {
-    feedbackElement.style.display = 'block';
-    feedbackElement.textContent = isCorrect ? 'Correct!' : 'Incorrect!';
-  }
-  
-
-// Show quiz summary function
-function showQuizSummary() {
-  // Hide question container
-  questionContainer.style.display = 'none';
-
-  // Display quiz summary message
-  const summaryMessage = `Quiz completed! You scored ${score} out of ${quizQuestions.length} questions.`;
-  scoreElement.textContent = summaryMessage;
-
 }
