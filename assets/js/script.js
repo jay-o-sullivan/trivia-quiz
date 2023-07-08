@@ -3,6 +3,7 @@ var currentQuestion = 0;
 var score = 0;
 var timer;
 var timeLeft = 60; // Total time for the quiz (in seconds)
+var feedbackText = '';
 
 var questions = [
     {
@@ -64,6 +65,18 @@ function showQuestion() {
     createChoices(choicesElement, question.choices);
 }
 
+
+
+function submitFeedback() {
+    feedbackText = document.getElementById('feedback').value;
+    // Do something with the feedback, such as sending it to a server or storing it locally
+    console.log('Feedback submitted:', feedbackText);
+    clearFeedback();
+}
+
+function clearFeedback() {
+    document.getElementById('feedback').value = '';
+}
 function clearChoices(choicesElement) {
     while (choicesElement.firstChild) {
         choicesElement.removeChild(choicesElement.firstChild);
@@ -80,11 +93,25 @@ function createChoices(choicesElement, choices) {
 }
 
 
+// Existing code...
+
 function checkAnswer(choice) {
     var question = questions[currentQuestion];
+    var choices = document.getElementById("choices").getElementsByTagName("button");
+
+    // Disable all choices to prevent further selection
+    for (var i = 0; i < choices.length; i++) {
+        choices[i].setAttribute("disabled", "true");
+    }
+
+    var selectedChoice = choices[choice];
 
     if (choice === question.correctAnswer) {
+        selectedChoice.classList.add("correct");
         score++;
+    } else {
+        selectedChoice.classList.add("wrong");
+        choices[question.correctAnswer].classList.add("correct");
     }
 
     currentQuestion++;
@@ -92,9 +119,23 @@ function checkAnswer(choice) {
     if (currentQuestion === questions.length) {
         endQuiz();
     } else {
-        showQuestion();
+        setTimeout(function() {
+            showQuestion();
+            resetChoices(choices);
+        }, 1500);
     }
 }
+
+function resetChoices(choices) {
+    for (var i = 0; i < choices.length; i++) {
+        choices[i].classList.remove("correct");
+        choices[i].classList.remove("wrong");
+        choices[i].removeAttribute("disabled");
+    }
+}
+
+// Existing code...
+
 
 function endQuiz() {
     clearInterval(timer);
@@ -105,15 +146,13 @@ function endQuiz() {
     restartButton.textContent = "Restart Quiz";
     restartButton.setAttribute("onclick", "restartQuiz()");
     quizContainer.appendChild(restartButton);
+    var feedbackSection = document.getElementById("feedback-section");
+    feedbackSection.style.display = "block";
 }
 
 function restartQuiz() {
     location.reload();
 }
-
-
-
-
 
 function startTimer() {
     timer = setInterval(function() {
