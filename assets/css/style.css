@@ -1,15 +1,17 @@
 /* style.css */
 body{
-    background-color: #F7E0D4;
+    background-image:url("../images/quiz-background.jpg");
 }
+
 .container {
     max-width: 600px;
     margin: 0 auto;
     text-align: center;
+    color: white;
 }
 
 h1 {
-    color: #092834;
+    color: #ffffff;
 }
 .card {
     background-color: #347B98;
