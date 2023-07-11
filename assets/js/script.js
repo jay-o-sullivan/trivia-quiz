@@ -3,10 +3,10 @@ var currentQuestion = 0;
 var score = 0;
 var timer;
 var timeLeft = 60; // Total time for the quiz (in seconds)
-var feedbackText = '';
 
 var questions = [
     {
+        
         question: "What is the capital of France?",
         choices: ["Paris", "London", "Madrid", "Rome"],
         correctAnswer: 0
@@ -20,7 +20,8 @@ var questions = [
         question: "What is the largest planet in our solar system?",
         choices: ["Jupiter", "Saturn", "Mars", "Earth"],
         correctAnswer: 0
-    },
+    }
+    ,
     {
         question: "What is the fastest field sport?",
         choices: ["Hurling", "Camogie", "Soccer", "Football"],
@@ -41,12 +42,16 @@ var questions = [
         choices: ["126", "165", "94", "118"],
         correctAnswer: 3
     },
-
 ];
 
 function startQuiz() {
     username = document.getElementById("username").value;
-    if (username.trim() !== "") {
+    var errorMessage = document.getElementById("error-message");
+
+    if (username.trim() === "") {
+        errorMessage.textContent = "Please enter a username.";
+    } else {
+        errorMessage.textContent = "";
         document.getElementById("username-form").style.display = "none";
         document.getElementById("quiz").style.display = "block";
         showQuestion();
@@ -65,18 +70,20 @@ function showQuestion() {
     createChoices(choicesElement, question.choices);
 }
 
+document.getElementById("feedback-form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form submission
 
+    // Get the feedback text
+    var feedbackText = document.getElementById("feedback-text").value;
 
-function submitFeedback() {
-    feedbackText = document.getElementById('feedback').value;
-    // Do something with the feedback, such as sending it to a server or storing it locally
-    console.log('Feedback submitted:', feedbackText);
-    clearFeedback();
-}
+    // Validate if the feedback is not empty
+    if (feedbackText.trim() !== "") {
+        // Hide the feedback form and display the thank you message
+        document.getElementById("feedback-container").style.display = "none";
+        document.getElementById("thank-you-message").style.display = "block";
+    }
+});
 
-function clearFeedback() {
-    document.getElementById('feedback').value = '';
-}
 function clearChoices(choicesElement) {
     while (choicesElement.firstChild) {
         choicesElement.removeChild(choicesElement.firstChild);
@@ -91,9 +98,6 @@ function createChoices(choicesElement, choices) {
         choicesElement.appendChild(choice);
     }
 }
-
-
-// Existing code...
 
 function checkAnswer(choice) {
     var question = questions[currentQuestion];
@@ -164,3 +168,11 @@ function startTimer() {
         }
     }, 1000);
 }
+function myFunction() {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+      x.className += " responsive";
+    } else {
+      x.className = "topnav";
+    }
+  }
