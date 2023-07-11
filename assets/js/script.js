@@ -79,7 +79,7 @@ document.getElementById("feedback-form").addEventListener("submit", function(eve
     // Validate if the feedback is not empty
     if (feedbackText.trim() !== "") {
         // Hide the feedback form and display the thank you message
-        document.getElementById("feedback-container").style.display = "none";
+        document.getElementById("feedback-form").style.display = "none";
         document.getElementById("thank-you-message").style.display = "block";
     }
 });
