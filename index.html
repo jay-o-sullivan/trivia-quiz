@@ -3,8 +3,22 @@
 <head>
     <title>Quiz App</title>
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+     <!-- Load an icon library to show a hamburger menu (bars) on small screens -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
+    
+<div class="topnav" id="myTopnav">
+  <a href="#home" class="active">Home</a>
+  <a href="#news">News</a>
+  <a href="#contact">Contact</a>
+  <a href="#about">About</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div> 
+
     <div class="container">
         <h1>Quiz App</h1>
         <div id="username-form">
@@ -13,8 +27,6 @@
             <button onclick="startQuiz()">Start Quiz</button>
             <p id="error-message" class="error-message"></p>
         </div>
-        
-        
         <div id="quiz-container">
             <div id="quiz" style="display: none;">
                 <div class="card">
@@ -26,9 +38,18 @@
             </div>
         </div>
         <div id="feedback-section" style="display: none;">
-            <textarea id="feedback" rows="4" placeholder="Enter your feedback"></textarea>
-            <button onclick="submitFeedback()">Submit Feedback</button>
+            <h2>Feedback</h2>
+            <form id="feedback-form">
+                <textarea id="feedback-text" placeholder="Enter your feedback"></textarea>
+                <button type="submit">Submit Feedback</button>
+            </form>
+            <div id="thank-you-message" style="display: none;">
+                <p>Thank you for your feedback!</p>
+              </div>              
         </div>
+        
+        
+        
     </div>
 
     <script src="assets/js/script.js"></script>
