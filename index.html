@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Quiz App</title>
+    <meta name="viewport" content="width-device-width", initial-scale=1.0>
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
      <!-- Load an icon library to show a hamburger menu (bars) on small screens -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -11,7 +12,7 @@
     
 <div class="topnav" id="myTopnav">
   <a href="#home" class="active">Home</a>
-  <a href="#news">News</a>
+  <a href="#Quizes">Quizes</a>
   <a href="#contact">Contact</a>
   <a href="#about">About</a>
   <a href="javascript:void(0);" class="icon" onclick="myFunction()">
@@ -22,7 +23,7 @@
     <div class="container">
         <h1>Quiz App</h1>
         <div id="username-form">
-            <label for="username">Username:</label>
+            <label for="username"><p>Username:</p></label>
             <input type="text" id="username" placeholder="Enter your username">
             <button onclick="startQuiz()">Start Quiz</button>
             <p id="error-message" class="error-message"></p>
