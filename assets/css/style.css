@@ -1,6 +1,7 @@
 /* style.css */
 body{
     background-image:url("../images/question-mark.jpg");
+    font-family:Georgia, 'Times New Roman', Times, serif;
 }
 
 .container {
@@ -11,7 +12,9 @@ body{
 }
 
 h1 {
+    padding-top: 5%;
     color: #ffffff;
+    font-style:initial;
 }
 .card {
     background-color: #347B98;
@@ -22,6 +25,7 @@ h1 {
 }
 
 #username-form {
+    margin-top: 15%;
     margin-bottom: 20px;
 }
 
@@ -92,7 +96,7 @@ button.wrong {
   }
   
   .topnav a.active {
-    background-color: #04AA6D;
+    background-color: #6CC6EA;
     color: white;
   }
   
